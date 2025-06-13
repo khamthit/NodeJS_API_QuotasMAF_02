@@ -8,8 +8,12 @@ const userRoutes = require('./routes/userRoutes');
 const addressRoutes = require('./routes/addressRoutes'); // Assuming addressRoutes is for provinces
 const districtRoutes = require('./routes/districtRoutes'); // Assuming districtRoutes is for districts
 const villageRoutes = require('./routes/villageRoutes'); // Assuming villageRoutes is for villages
-
+const registerRoutes = require('./routes/registerRoutes'); // Assuming registerRoutes is for villages
+const registerlicenseRoutes = require('./routes/registerlicenseRoutes'); // Assuming registerRoutes is for villages
 const errorHandler = require('./middleware/errorHandler');
+
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 
@@ -49,9 +53,73 @@ app.use('/api/District/deleteDistrict', districtRoutes);
 //this is for village
 app.use('/api/Village/getVillages', villageRoutes);
 app.use('/api/Village/newVillages', villageRoutes);
+app.use('/api/Village/updateVillages', villageRoutes);
+app.use('/api/Village/deleteVillages', villageRoutes);
+//this is for register
+app.use('/api/Register/getRegister', registerRoutes);
+app.use('/api/Register/newRegister', registerRoutes);
+app.use('/api/Register/verifyOTP', registerRoutes);
+app.use('/api/Register/addGeneralInfo', registerRoutes);
+//this is for register license
+app.use('/api/Register/updateLicenseDetails', registerlicenseRoutes);
 
 
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        // Store uploaded files in the 'uploads' directory
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        // Save file with the original name and add timestamp to avoid conflicts
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        // File type validation: only accept image files
+        const fileTypes = /jpeg|jpg|png|gif|pdf/;
+        const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimeType = fileTypes.test(file.mimetype);
+
+        if (extname && mimeType) {
+            return cb(null, true); // Accept file
+        } else {
+            cb(new Error('Only image files are allowed!'), false); // Reject file
+        }
+    },
+    limits: { fileSize: 5 * 1024 * 1024 } // Limit file size to 5 MB
+});
+
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send('No file uploaded.');
+        }
+        res.status(200).send({
+            message: 'Image uploaded successfully!',
+            file: req.file,  // The uploaded file information (path, filename, etc.)
+        });
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        res.status(500).send('Error uploading image');
+    }
+});
+
+app.get('/uploads/:imageName', (req, res) => {
+    const { imageName } = req.params;
+    const imagePath = path.join(__dirname, '..', 'uploads', imageName);
+    console.log('Image path:', imagePath);
+
+    // Check if the image exists
+    res.sendFile(imagePath, (err) => {
+        if (err) {
+            res.status(404).send('Image not found!');
+        }
+    });
+});
 
 // Global Error Handler (must be the last middleware)
 app.use(errorHandler);

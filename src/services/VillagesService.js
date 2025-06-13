@@ -19,7 +19,7 @@ class VillageService {
       });
       return villages;
     } catch (error) {
-        console.log("Error message Service :", error);
+      console.log("Error message Service :", error);
     }
   }
 
@@ -89,24 +89,67 @@ class VillageService {
 
   async createVillage(villageData) {
     try {
-        const {villa, vilen, dstid, roadname, descriptions, createby } = villageData;
-        const result = await sequelize.query(
-            `CALL pd_createVillage(:villa, :vilen, :dstid, :roadname, :descriptions, :createby)`,
-            {
-              replacements: {
-                villa,
-                vilen,
-                dstid,
-                roadname,
-                descriptions,
-                createby,
-              },
-              type: sequelize.QueryTypes.RAW,
-            }
-          );
-          return result;
+      const { villa, vilen, dstid, roadname, descriptions, createby } =
+        villageData;
+      const result = await sequelize.query(
+        `CALL pd_createVillage(:villa, :vilen, :dstid, :roadname, :descriptions, :createby)`,
+        {
+          replacements: {
+            villa,
+            vilen,
+            dstid,
+            roadname,
+            descriptions,
+            createby,
+          },
+          type: sequelize.QueryTypes.RAW,
+        }
+      );
+      return result;
     } catch (error) {
-        console.log("Error message Service :", error);
+      console.log("Error message Service :", error);
+    }
+  }
+  async updateVillage(villageData) {
+    try {
+      const { vlid, villa, vilen, dstid, roadname, descriptions, createby } =
+        villageData;
+
+      const updateData = await Village.update(
+        {
+          villa: villa,
+          vilen: vilen,
+          dstid: dstid,
+          roadname: roadname,
+          descriptions: descriptions,
+          createby: createby,
+        },
+        {
+          where: {
+            vlid: vlid,
+          },
+        }
+      );
+      return updateData;
+    } catch (error) {
+      console.log("Error message Service :", error);
+    }
+  }
+
+  async deleteVillage(villageData) {
+    try {
+      const { vlid } = villageData;
+      const deleteData = await Village.update(
+        { vlid: vlid, statustype: "DEL" },
+        {
+          where: {
+            vlid: vlid,
+          },
+        }
+      );
+      return deleteData;
+    } catch (error) {
+      console.log("Error message Service :", error);
     }
   }
 }

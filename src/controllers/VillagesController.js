@@ -102,46 +102,137 @@ class VillageController {
   }
   async newVillages(req, res, next) {
     try {
-        const {tokenKey} = req.query;
-        const {villa, vilen, dstid, roadname, descriptions} = req.body;
-        if (!villa || !vilen || !dstid || !roadname || !descriptions) {
-            return SendError400(res, "Missing required fields");
-        }
-        console.log("tokenkey :", tokenKey);
+      const { tokenKey } = req.query;
+      const { villa, vilen, dstid, roadname, descriptions } = req.body;
+      if (!villa || !vilen || !dstid || !roadname || !descriptions) {
+        return SendError400(res, "Missing required fields");
+      }
+      console.log("tokenkey :", tokenKey);
 
-        const userDetails = await VillageController.fetchTokenKeyForUser(tokenKey);
-        if (userDetails.tokenkey != tokenKey){
-            return SendError400(res, 400, "Invalid token key or user not found");        
-        }
-        //this is check data
-        const checkData = await this.villageService.checkDataFirst(villa, vilen, dstid);
-        if (checkData){
-            return SendDuplicateData(res, "Duplicate data");
-        }
-        //this is save data
-        const savedata = await this.villageService.createVillage({
-            villa,
-            vilen,
-            dstid,
-            roadname,
-            descriptions,
-            createby: userDetails.emailorphone
-        });
-        //this is save log
-        let form="Village - newVillages";
-        let newdata = villa + " " + vilen + " " + dstid + " " + roadname + " " + descriptions;
-        let olddata="";
-        const savelog = await this.villageService.createLogSystem({
-            form,
-            newdata,
-            olddata,
-            createby: userDetails.emailorphone
-        });
-        return SendCreate(res, 200, "Villages created successfully");
-
-        
+      const userDetails = await VillageController.fetchTokenKeyForUser(
+        tokenKey
+      );
+      if (userDetails.tokenkey != tokenKey) {
+        return SendError400(res, 400, "Invalid token key or user not found");
+      }
+      //this is check data
+      const checkData = await this.villageService.checkDataFirst(
+        villa,
+        vilen,
+        dstid
+      );
+      if (checkData) {
+        return SendDuplicateData(res, "Duplicate data");
+      }
+      //this is save data
+      const savedata = await this.villageService.createVillage({
+        villa,
+        vilen,
+        dstid,
+        roadname,
+        descriptions,
+        createby: userDetails.emailorphone,
+      });
+      //this is save log
+      let form = "Village - newVillages";
+      let newdata =
+        villa + " " + vilen + " " + dstid + " " + roadname + " " + descriptions;
+      let olddata = "";
+      const savelog = await this.villageService.createLogSystem({
+        form,
+        newdata,
+        olddata,
+        createby: userDetails.emailorphone,
+      });
+      return SendCreate(res, 200, "Villages created successfully");
     } catch (error) {
-        return SendError(res, 500, error.message);
+      return SendError(res, 500, error.message);
+    }
+  }
+
+  async updateVillages(req, res, next) {
+    try {
+      const { tokenKey } = req.query;
+      const { vlid, villa, vilen, dstid, roadname, descriptions } = req.body;
+      if (!vlid || !villa || !vilen || !dstid || !roadname || !descriptions) {
+        return SendError400(res, 400, "Missing required fields");
+      }
+      //this check tokenkey
+      const userDetails = await VillageController.fetchTokenKeyForUser(
+        tokenKey
+      );
+      if (userDetails.tokenkey != tokenKey) {
+        return SendError400(res, 400, "Invalid token key or user not found");
+      }
+      // this is check data first
+      const checkdata = await this.villageService.checkDataFirst(
+        villa,
+        vilen,
+        dstid
+      );
+      if (checkdata) {
+        return SendDuplicateData(res, 400, "Duplicate data");
+      }
+      //this is update Data
+      const updateData = await this.villageService.updateVillage({
+        vlid,
+        villa,
+        vilen,
+        roadname,
+        descriptions,
+        dstid,
+        createby: userDetails.emailorphone,
+      });
+      //this is save log
+      let form = "Village - Update";
+      let newdata =
+        vlid +
+        " " +
+        villa +
+        " " +
+        vilen +
+        " " +
+        roadname +
+        " " +
+        descriptions +
+        " " +
+        dstid;
+      let olddata = "";
+      const savelog = await this.villageService.createLogSystem({
+        form,
+        newdata,
+        olddata,
+        createby: userDetails.emailorphone,
+      });
+      return SendCreate(res, 200, "District created successfully");
+    } catch (error) {
+      console.log("Error message Controller :", error);
+      return SendError(res, 500, error.message);
+    }
+  }
+  async deleteVillages(req, res, next) {
+    try {
+      const { tokenKey } = req.query;
+      const { vlid } = req.body;
+      //this is check tokenkey
+      console.log("tokenkey :", tokenKey);
+      const userDetails = await VillageController.fetchTokenKeyForUser(
+        tokenKey
+      );
+      if (userDetails.tokenkey != tokenKey) {
+        return SendError400(res, 400, "Invalid token key or user not found");
+      }
+      //This is save data
+      const deleteData = await this.villageService.deleteVillage({
+        vlid,
+        createby: userDetails.emailorphone,
+      });
+
+      SendCreate(res, 200, "District deleted successfully");
+
+    } catch (error) {
+      console.log("Error message Controller :", error);
+      return SendError(res, 500, error.message);
     }
   }
 }

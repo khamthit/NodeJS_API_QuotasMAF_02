@@ -11,6 +11,8 @@ const villagesController = new VillageController(villageService);
 
 router.get('/', villagesController.getAllVillages.bind(villagesController)); // Use .bind(this) for class methods
 router.post('/', villagesController.newVillages.bind(villagesController));
+router.put('/', villagesController.updateVillages.bind(villagesController));
+router.delete('/', villagesController.deleteVillages.bind(villagesController));
 
 
 module.exports = router;
