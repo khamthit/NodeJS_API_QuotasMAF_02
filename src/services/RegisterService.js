@@ -336,5 +336,111 @@ class RegisterService {
     }
   }
 
+  async updateRegisterDoc(updateData) {
+    try {
+      console.log("Service: updateRegisterDoc, Input Data:", updateData);
+      const {
+        emails,
+        taxstartdate,
+        taxexpiredate,
+        taxfile,
+        imexstartdate,
+        imexexpiredate,
+        imexfile,
+        accountstartdate,
+        accountexpiredate,
+        accountfile,
+        bankstartdate,
+        bankexpiredate,
+        bankfile,
+        registerstartdate,
+        registerexpiredate,
+        registerfile,
+        approvestartdate,
+        approveexpiredate,
+        approvefile,
+        registertaxstartdate,
+        registertaxenddate, // This will be mapped to :registertaxexpiredate
+        registertaxfile,
+      } = updateData;
+
+      if (!emails) {
+        throw new Error("Email is required for updating register documents.");
+      }
+
+      const result = await sequelize.query(
+        `CALL pd_registerAttachDoc(
+          :emails, :taxstartdate, :taxexpiredate, :taxfile, 
+          :imexstartdate, :imexexpiredate, :imexfile, 
+          :accountstartdate, :accountexpiredate, :accountfile, 
+          :bankstartdate, :bankexpiredate, :bankfile, 
+          :registerstartdate, :registerexpiredate, :registerfile, 
+          :approvestartdate, :approveexpiredate, :approvefile, 
+          :registertaxstartdate, :registertaxexpiredate, :registertaxfile
+        )`,
+        {
+        replacements: {
+            emails,
+            taxstartdate,
+            taxexpiredate,
+            taxfile,
+            imexstartdate,
+            imexexpiredate,
+            imexfile,
+            accountstartdate,
+            accountexpiredate,
+            accountfile,
+            bankstartdate,
+            bankexpiredate,
+            bankfile,
+            registerstartdate,
+            registerexpiredate,
+            registerfile,
+            approvestartdate,
+            approveexpiredate,
+            approvefile, // Corrected from 'approve'
+            registertaxstartdate,
+            registertaxexpiredate: registertaxenddate, // Map controller's 'registertaxenddate' to SP's 'registertaxexpiredate'
+            registertaxfile,
+        },
+        type: sequelize.QueryTypes.RAW,
+      });
+
+      // Attempt to determine updated count (highly dependent on DB and SP implementation)
+      let updatedCount = 0;
+      if (result && result[0] && result[0][0] && result[0][0].hasOwnProperty('updated_count')) {
+        updatedCount = parseInt(result[0][0].updated_count, 10);
+      } else if (result && Array.isArray(result) && result.length > 1 && typeof result[1] === 'object' && result[1] !== null && result[1].hasOwnProperty('rowCount')) {
+        updatedCount = parseInt(result[1].rowCount, 10);
+      }
+      // console.log("Service: updateRegisterDoc result", result, "Updated count:", updatedCount);
+      return { updated: updatedCount, rawResult: result };
+    } catch (error) {
+      console.error("Service Error: Failed to updateRegisterDoc:", error);
+      throw new Error(`Failed to update register documents in service: ${error.message}`);
+    }
+  }
+
+  async updateRegisterBank(bkid, emails, bankaccountname, salebkid, salebankaccountname){
+    try {
+      const updateData = await Register.update({
+        bkid: bkid,
+        statustype: "PENDING",
+        logingstatus: "Y",
+        bankaccountname: bankaccountname,
+        sale_bkid: salebkid,
+        sale_bankaccountname: salebankaccountname
+      }, {
+        where: {
+          emails: emails
+        }
+      });
+      return updateData;
+    } catch (error) {
+       console.error("Service Error: Failed to updateRegisterBank:", error);
+      throw new Error(`Failed to update updateRegisterBank in service: ${error.message}`);
+    }
+  }
+
 }
 module.exports = RegisterService;

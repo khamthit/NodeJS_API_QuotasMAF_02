@@ -107,10 +107,31 @@ const Register = sequelize.define(
       allowNull: true,
       defaultValue: DataTypes.NOW, // Default to current date and time}
     },
+    bkid:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    bankaccountname:{
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    sale_bkid:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    sale_bankaccountname:{
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     tokenkey: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    logingstatus: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+
   },
   {
     timestamps: false,

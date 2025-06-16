@@ -1,4 +1,3 @@
-
 const express = require("express"); // Though not used in the current snippet, convert for consistency
 const { Sequelize } = require("sequelize"); // Import Sequelize
 const {
@@ -147,8 +146,15 @@ class RegisterController {
 
   async addGeneralInfo(req, res, next) {
     try {
-      const { emails, typeregister, firstname, lastname, mobiles, passwords, images } =
-        req.body;
+      const {
+        emails,
+        typeregister,
+        firstname,
+        lastname,
+        mobiles,
+        passwords,
+        images,
+      } = req.body;
       const updateData = {
         emails,
         typeregister,
@@ -158,7 +164,7 @@ class RegisterController {
         passwords,
         images,
       };
-      
+
       const update = await this.registerService.registerGeneralInfo(updateData);
       if (update) {
         return SendSuccess(res, 200, "Add General Info uccessfully");
@@ -174,7 +180,8 @@ class RegisterController {
   async updateLicenseDetails(req, res, next) {
     try {
       console.log("updateLicenseDetails");
-      const { emails,
+      const {
+        emails,
         businessid,
         laoenterprise,
         engenterprise,
@@ -187,9 +194,12 @@ class RegisterController {
         village,
         taxinfo,
         taxregistration,
-        status } = req.body;
+        status,
+      } = req.body;
 
-        const updateData = {emails, businessid,
+      const updateData = {
+        emails,
+        businessid,
         laoenterprise,
         engenterprise,
         registerby,
@@ -201,17 +211,104 @@ class RegisterController {
         village,
         taxinfo,
         taxregistration,
-        status};
-        const update = await this.registerService.updateLicenseDetails(updateData);
-        if (update) {
-          return SendSuccess(res, 200, "Update License Details uccessfully");
-        }else{
-          return SendError(res, 400, "Update License Details , Please try again.");
-        }
-
+        status,
+      };
+      const update = await this.registerService.updateLicenseDetails(
+        updateData
+      );
+      if (update) {
+        return SendSuccess(res, 200, "Update License Details uccessfully");
+      } else {
+        return SendError(
+          res,
+          400,
+          "Update License Details , Please try again."
+        );
+      }
     } catch (error) {
       console.log("Failed to updateLicenseDetails");
       return SendError(res, 500, "Failed to updateLicenseDetails");
+    }
+  }
+
+  async updateRegisterDoc(req, res, next) {
+    try {
+      console.log("updateRegisterDoc");
+      const {
+        emails,
+        taxstartdate,
+        taxexpiredate,
+        taxfile,
+        imexstartdate,
+        imexexpiredate,
+        imexfile,
+        accountstartdate,
+        accountexpiredate,
+        accountfile,
+        bankstartdate,
+        bankexpiredate,
+        bankfile,
+        registerstartdate,
+        registerexpiredate,
+        registerfile,
+        approvestartdate,
+        approveexpiredate,
+        approvefile,
+        registertaxstartdate,
+        registertaxenddate,
+        registertaxfile,
+      } = req.body;
+      const updateData = {
+        emails,
+        taxstartdate,
+        taxexpiredate,
+        taxfile,
+        imexstartdate,
+        imexexpiredate,
+        imexfile,
+        accountstartdate,
+        accountexpiredate,
+        accountfile,
+        bankstartdate,
+        bankexpiredate,
+        bankfile,
+        registerstartdate,
+        registerexpiredate,
+        registerfile,
+        approvestartdate,
+        approveexpiredate,
+        approvefile,
+        registertaxstartdate,
+        registertaxenddate,
+        registertaxfile,
+      };
+      const update = await this.registerService.updateRegisterDoc(updateData);
+      // console.log("update : ", update);
+      if (update) {
+        return SendSuccess(res, 200, "Update Register Doc uccessfully");
+      } else {
+        return SendError(res, 400, "Update Register Doc , Please try again.");
+      }
+    } catch (error) {
+      console.log("Failed to updateRegisterDoc in controller");
+      return SendError(res, 500, "Failed to updateRegisterDoc in controller");
+    }
+  }
+
+  async updateRegisterBank(req, res, next) {
+    try {
+      const {bkid, emails, bankaccountname, salebkid, salebankaccountname} = req.body;
+      const update = await this.registerService.updateRegisterBank(bkid, emails, bankaccountname, salebkid, salebankaccountname, salebankaccountname);
+      // console.log("update : ", update);
+      if (update) {
+        return SendSuccess(res, 200, "Update Register Bank uccessfully");
+      } else {
+        return SendError(res, 400, "Update Register Bank , Please try again.");
+      }
+
+    } catch (error) {
+      console.log("Failed to updateRegisterDoc in controller");
+      return SendError(res, 500, "Failed to updateRegisterDoc in controller");
     }
   }
 }

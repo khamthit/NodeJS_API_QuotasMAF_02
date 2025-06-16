@@ -10,10 +10,15 @@ const districtRoutes = require('./routes/districtRoutes'); // Assuming districtR
 const villageRoutes = require('./routes/villageRoutes'); // Assuming villageRoutes is for villages
 const registerRoutes = require('./routes/registerRoutes'); // Assuming registerRoutes is for villages
 const registerlicenseRoutes = require('./routes/registerlicenseRoutes'); // Assuming registerRoutes is for villages
+const bankRoutes = require('./routes/bankRoute'); // Assuming registerRoutes is for bank
+const userloginRoutes = require('./routes/userloginRoutes'); // Assuming registerRoutes is for bank
+
+
 const errorHandler = require('./middleware/errorHandler');
 
 const multer = require('multer');
 const path = require('path');
+// const RegisterController = require('./controllers/RegisterController');
 
 const app = express();
 
@@ -62,6 +67,16 @@ app.use('/api/Register/verifyOTP', registerRoutes);
 app.use('/api/Register/addGeneralInfo', registerRoutes);
 //this is for register license
 app.use('/api/Register/updateLicenseDetails', registerlicenseRoutes);
+app.use('/api/Register/updateRegisterDoc', registerlicenseRoutes);
+app.use('/api/Register/updateRegisterBank', registerlicenseRoutes);
+//this is for bank data
+app.use('/api/Bank/getBank', bankRoutes);
+app.use('/api/Bank/newBank', bankRoutes);
+app.use('/api/Bank/updateBank', bankRoutes);
+app.use('/api/Bank/deleteBank', bankRoutes);
+//this is for userlogin
+app.use('/api/Userlogin/userLogin', userloginRoutes);
+
 
 
 
