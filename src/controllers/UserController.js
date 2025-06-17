@@ -48,7 +48,7 @@ class UserController {
 
   async getUsers(req, res, next) {
     try {
-      const { page, limit, tokenKey, typeLogin } = req.query;
+      const { page, limit, tokenKey } = req.query;
       const { items, totalItems, totalPages, currentPage } =
         await this.userService.getAllUsers({ page, limit });
       const paginationData = {
@@ -62,9 +62,7 @@ class UserController {
       if (!userDetails) {
         return SendError400(res, "Invalid token key or user not found");
       }
-      if (
-        userDetails.typelogin !== typeLogin ||
-        userDetails.tokenkey !== tokenKey
+      if (userDetails.tokenkey !== tokenKey
       ) {
         return SendError(
           res,
@@ -90,23 +88,18 @@ class UserController {
           res, // SendError400 implies 400 status
           "Missing required fields: emailorphone or passwords"
         );
-      }
-      // Use the userService to handle login logic
-      const authenticatedUser = await this.userService.loginUser({
+      }      
+      const userData = await this.userService.loginUser2(
         emailorphone,
-        password: passwords, // Pass the password to the service
-      });
-      console.log("Authenticated User:", authenticatedUser);
-      if (!authenticatedUser) {
-        return SendError(res, 401, "Try again."); // 401 for unauthorized
-      }
-      const { passwords: _, ...userResponseData } = authenticatedUser.get({
-        plain: true,
-      });
+        passwords
+      );
 
-      return SendSuccess(res, "Login successful.", {
-        user: userResponseData,
-      });
+      if (userData.success === false) {
+        return SendError(res, 401, userData.message); // 401 for unauthorized
+      }
+      console.log("Login successful :", userData);
+      return SendSuccess(res, "Login successful.", userData)
+
     } catch (error) {
       console.error("Error in loginUser controller:", error.message);
       next(error); // Pass to global error handler
@@ -115,7 +108,7 @@ class UserController {
 
   async createUser(req, res, next) {
     try {
-      const { tokenKey, typeLogin } = req.query; // For authorization/context
+      const { tokenKey } = req.query; // For authorization/context
       const { userorphone, passwords, getTypeLogin } = req.body; // User data to create
 
       if (!userorphone || !passwords || !getTypeLogin) {
@@ -127,7 +120,6 @@ class UserController {
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
       if (
         !userDetails ||
-        userDetails.typelogin !== typeLogin ||
         userDetails.tokenkey !== tokenKey
       ) {
         return SendError400(
@@ -170,7 +162,7 @@ class UserController {
         res,
         201, // statuscode for the JSON body, 201 for created
         "User created successfully via stored procedure.",
-        result
+        userorphone
       );
     } catch (error) {
       // console.error("Error in createUser:", error);
@@ -187,7 +179,7 @@ class UserController {
   }
 
   async updatePasswords(req, res, next) {
-    const { tokenKey, typeLogin } = req.query; // Authorization context from query
+    const { tokenKey } = req.query; // Authorization context from query
     const { emailorphone, newPassword } = req.body; // Target user and new password from body
     try {
       if (!emailorphone || !newPassword) {
@@ -200,7 +192,6 @@ class UserController {
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
       if (
         !userDetails ||
-        userDetails.typelogin !== typeLogin ||
         userDetails.tokenkey !== tokenKey
       ) {
         return SendError400(
@@ -288,7 +279,7 @@ class UserController {
   }
 
   async deleteUserLogin(req, res, next) {
-    const { tokenKey, typeLogin } = req.query; // Authorization context from query
+    const { tokenKey } = req.query; // Authorization context from query
     const { emailorphone } = req.body; // Target user from body
     try {
       if (!emailorphone) {
@@ -301,7 +292,6 @@ class UserController {
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
       if (
         !userDetails ||
-        userDetails.typelogin !== typeLogin ||
         userDetails.tokenkey !== tokenKey
       ) {
         return SendError400(

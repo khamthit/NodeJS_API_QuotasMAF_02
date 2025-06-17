@@ -12,6 +12,7 @@ const registerRoutes = require('./routes/registerRoutes'); // Assuming registerR
 const registerlicenseRoutes = require('./routes/registerlicenseRoutes'); // Assuming registerRoutes is for villages
 const bankRoutes = require('./routes/bankRoute'); // Assuming registerRoutes is for bank
 const userloginRoutes = require('./routes/userloginRoutes'); // Assuming registerRoutes is for bank
+const categoryapproveRoutes = require('./routes/categoryapproveRoutes'); // Assuming registerRoutes is for bank
 
 
 const errorHandler = require('./middleware/errorHandler');
@@ -78,6 +79,13 @@ app.use('/api/Bank/deleteBank', bankRoutes);
 app.use('/api/Userlogin/userLogin', userloginRoutes);
 app.use('/api/Userlogin/verifyEmail', userloginRoutes);
 app.use('/api/Userlogin/updatePassword', userloginRoutes);
+//this is for CategoryApprove
+app.use('/api/CategoryApprove/newCategoryApprove', categoryapproveRoutes);
+app.use('/api/CategoryApprove/getCategoryApprove', categoryapproveRoutes);
+app.use('/api/CategoryApprove/updateCategoryApprove', categoryapproveRoutes);
+app.use('/api/CategoryApprove/deleteCategoryApprove', categoryapproveRoutes);
+
+
 
 
 
