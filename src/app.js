@@ -76,7 +76,8 @@ app.use('/api/Bank/updateBank', bankRoutes);
 app.use('/api/Bank/deleteBank', bankRoutes);
 //this is for userlogin
 app.use('/api/Userlogin/userLogin', userloginRoutes);
-
+app.use('/api/Userlogin/verifyEmail', userloginRoutes);
+app.use('/api/Userlogin/updatePassword', userloginRoutes);
 
 
 

@@ -14,7 +14,18 @@ const SendSuccess = (res, message, data, pagination) => {
         success: true,
         statuscode: 200,
         message: message || 'Request successful.',
-        data: data
+        data: data,
+    };
+    if (pagination) {
+        responseBody.pagination = pagination;
+    }
+    return res.status(200).json(responseBody);
+};
+
+const SendSuccessLogin = (res, data, pagination) => {
+    const responseBody = {
+        success: true,
+        statuscode: 200,
     };
     if (pagination) {
         responseBody.pagination = pagination;
@@ -55,5 +66,6 @@ module.exports = {
     SendError400,
     SendError,
     SendDuplicateData,
+    SendSuccessLogin,
     // Export other functions here
 };

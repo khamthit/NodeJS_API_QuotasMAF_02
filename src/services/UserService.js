@@ -60,7 +60,6 @@ class UserService {
           `[UserService - loginUser] Password mismatch for user: ${emailorphone}`
         );
       }
-
       // new tokenkey
       const newTokenKey = `${user.usid}-${Date.now()}`; // Example token key generation
       await UserService.updateTokenkeyForUser(user.emailorphone, newTokenKey);

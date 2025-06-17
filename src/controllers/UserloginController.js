@@ -6,6 +6,7 @@ const {
   SendError400,
   SendError,
   SendDuplicateData,
+  SendSuccessLogin,
 } = require("../utils/response");
 
 const User = require("../models/User");
@@ -20,20 +21,55 @@ class UserloginController {
 
   async Userlogin(req, res, next) {
     try {
-        const { emails, passwords } = req.body;
-        const readUser = await this.userloginService.Userlogin(emails, passwords);
-        // console.log("ReadUser : : ", readUser.success);
+      const { emails, passwords } = req.body;
+      const readUser = await this.userloginService.Userlogin(emails, passwords);
+      // console.log("ReadUser : : ", readUser.success);
 
-        if (readUser.success === false){
-            return SendError400(res, "Your user and password is not match.", readUser);
-        }else{
-            return SendSuccess(res, 200, "Login register successfully", readUser);
-        }
+      if (readUser.success === false) {
+        return SendError400(
+          res,
+          "Your user and password is not match.",
+          readUser
+        );
+      } else {
+        return SendSuccessLogin(res, 200, readUser);
+      }
 
-        return SendSuccess(res, 200, "Login register successfully", readUser);
+      return SendSuccess(res, 200, "Login register successfully", readUser);
     } catch (error) {
-        console.log("Userlogin Controller Error: ", error);
+      console.log("Userlogin Controller Error: ", error);
       return SendError(res, 500, "Failed to login register");
+    }
+  }
+  async verifyEmail(req, res, next) {
+    try {
+      const { emails } = req.body;
+      const readUser = await this.userloginService.verifyEmail(emails);
+      console.log("ReadUser : : ", readUser.success);
+      if (readUser.success === false) {
+        return SendError400(res, "Your Emails is not match.", readUser);
+      } else {
+        return SendSuccessLogin(res, 200, readUser);
+      }
+    } catch (error) {
+      console.log("Userlogin controller error: ", error);
+      return SendError(res, 500, "Failed to verify email");
+    }
+  }
+
+  async updatePassword(req, res, next) {
+    try {
+      const {emails, passwords} = req.body;
+      const readUser = await this.userloginService.updatePassword(emails, passwords);
+      console.log("ReadUser : : ", readUser.success);
+      if (readUser.success === false) {
+        return SendError400(res, "Your Emails is not match.", readUser);
+      } else {
+        return SendSuccessLogin(res, 200, readUser);
+      }
+    } catch (error) {
+      console.log("UpdatePassowrd controller error :", error);
+      return SendError(res, 500, "Failed to update password");
     }
   }
 }
