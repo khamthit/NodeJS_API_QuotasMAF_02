@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const moment = require("moment"); // Import moment.js for date formatting
 
+const CategoryApprove = require('./CategoryApprove'); // Import CategoryApprove model
 const GroupApprove = sequelize.define(
   "GroupApprove",
   {
@@ -52,4 +53,8 @@ const GroupApprove = sequelize.define(
     tableName: "tb_groupapproval",
   }
 );
+
+// Define association: GroupApprove belongs to CategoryApprove
+GroupApprove.belongsTo(CategoryApprove, { foreignKey: 'capid', targetKey: 'capid' });
+
 module.exports = GroupApprove;

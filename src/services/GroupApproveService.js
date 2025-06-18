@@ -3,8 +3,8 @@ const LogSystem = require("../models/logsystem"); // Assuming LogSystem model
 const { Op } = require("sequelize"); // Import Op for Sequelize operators
 const GroupApprove = require("../models/GroupApprove"); // Assuming User model
 const sequelize = require("../config/db");
-
-class CategoryApproveService {
+const CategoryApprove = require("../models/CategoryApprove"); // Assuming User model
+class GroupApproveService {
   async checkDataFirst(groupname, groupcode, capid) {
     try {
       const groupapprove = await GroupApprove.findOne({
@@ -117,11 +117,9 @@ class CategoryApproveService {
             ],
           };
       }
-
-      
-
       const { count, rows } = await GroupApprove.findAndCountAll({
         where: whereClause,
+        include: CategoryApprove, // Include the CategoryApprove model
         limit: pageLimit,
         offset: offset,
         order: [["groupcode", "ASC"]], // Sorting as an example
@@ -157,4 +155,4 @@ class CategoryApproveService {
     }
   }
 }
-module.exports = CategoryApproveService;
+module.exports = GroupApproveService;
