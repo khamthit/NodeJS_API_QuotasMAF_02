@@ -14,6 +14,8 @@ const User = require("../models/User");
 const LogSystem = require("../models/logsystem"); // Assuming LogSystem model
 const { Op } = require("sequelize"); // Import Op for Sequelize operators
 
+// const jwt = require('jsonwebtoken');
+
 class CategoryApproveController {
   constructor(categoryapproveService) {
     this.categoryapproveService = categoryapproveService; // Dependency Injection
@@ -102,6 +104,7 @@ class CategoryApproveController {
       return SendError(res, 500, "Internal Server Error");
     }
   }
+  
 
   async getAllCategoryApprove(req, res, next) {
     try {
@@ -123,7 +126,6 @@ class CategoryApproveController {
       }
 
       let { items, totalItems, totalPages, currentPage } = response;
-
       const paginationData = {
         totalItems,
         totalPages,
@@ -157,77 +159,89 @@ class CategoryApproveController {
   }
   async updateCategoryApprove(req, res, next) {
     try {
-        const {tokenKey}=req.query;
-        const {catename,capid}=req.body;
-        if (!catename || !capid) {
-            return SendError400(res, "Missing required fields");
-        }
-        //this is fect token compare
-        const userData = await CategoryApproveController.fetchTokenKeyForUser(tokenKey);
-        if (userData.tokenkey != tokenKey) {
-            return SendError400(res, 400, "Invalid token key or user not found");
-        }
-        //this is check data first
-        const checkData = await this.categoryapproveService.checkDataFirst(catename);
-        if (checkData) {
-            return SendDuplicateData(res, "Duplicate data");
-        }
-        //this is update data
-        const updateCategoryApprove = await this.categoryapproveService.updateCategoryApprove(catename,capid);
-        //this is save log
-        let form = "Update CategoryApprove";
-        let newdata = catename + " updateby : " + userData.emailorphone;
-        let olddata = "";
-        const savelog = await this.categoryapproveService.createLogSystem({
-            form,
-            newdata,
-            olddata,
-            createby: userData.emailorphone,
-        });
-        return SendCreate(res, 200, "CategoryApprove updated successfully", catename);
-
-
+      const { tokenKey } = req.query;
+      const { catename, capid } = req.body;
+      if (!catename || !capid) {
+        return SendError400(res, "Missing required fields");
+      }
+      //this is fect token compare
+      const userData = await CategoryApproveController.fetchTokenKeyForUser(
+        tokenKey
+      );
+      if (userData.tokenkey != tokenKey) {
+        return SendError400(res, 400, "Invalid token key or user not found");
+      }
+      //this is check data first
+      const checkData = await this.categoryapproveService.checkDataFirst(
+        catename
+      );
+      if (checkData) {
+        return SendDuplicateData(res, "Duplicate data");
+      }
+      //this is update data
+      const updateCategoryApprove =
+        await this.categoryapproveService.updateCategoryApprove(
+          catename,
+          capid
+        );
+      //this is save log
+      let form = "Update CategoryApprove";
+      let newdata = catename + " updateby : " + userData.emailorphone;
+      let olddata = "";
+      const savelog = await this.categoryapproveService.createLogSystem({
+        form,
+        newdata,
+        olddata,
+        createby: userData.emailorphone,
+      });
+      return SendCreate(
+        res,
+        200,
+        "CategoryApprove updated successfully",
+        catename
+      );
     } catch (error) {
-        console.error("Error update categoryapprove : ", error);
-        return SendError(res, 500, "Internal Server Error" );
+      console.error("Error update categoryapprove : ", error);
+      return SendError(res, 500, "Internal Server Error");
     }
   }
 
   async deleteCategoryApprove(req, res, next) {
     try {
-        const {tokenKey}=req.query;
-        const {capid}=req.body;
-        if (!capid) {
-            return SendError400(res, "Missing required fields");
-        }
-        //this is fect token compare
-        const userData = await CategoryApproveController.fetchTokenKeyForUser(tokenKey);
-        if (userData.tokenkey != tokenKey) {
-            return SendError400(res, 400, "Invalid token key or user not found");
-        }
-        //this is update data
-        const updateCategoryApprove = await this.categoryapproveService.deleteCategoryApprove(capid);
-        //this is save log
-        let form = "Delete CategoryApprove";
-        let newdata = "ID : " + capid + " updateby : " + userData.emailorphone;
-        let olddata = "";
-        const savelog = await this.categoryapproveService.createLogSystem({
-            form,
-            newdata,
-            olddata,
-            createby: userData.emailorphone,
-        });
+      const { tokenKey } = req.query;
+      const { capid } = req.body;
+      if (!capid) {
+        return SendError400(res, "Missing required fields");
+      }
+      //this is fect token compare
+      const userData = await CategoryApproveController.fetchTokenKeyForUser(
+        tokenKey
+      );
+      if (userData.tokenkey != tokenKey) {
+        return SendError400(res, 400, "Invalid token key or user not found");
+      }
+      //this is update data
+      const updateCategoryApprove =
+        await this.categoryapproveService.deleteCategoryApprove(capid);
+      //this is save log
+      let form = "Delete CategoryApprove";
+      let newdata = "ID : " + capid + " updateby : " + userData.emailorphone;
+      let olddata = "";
+      const savelog = await this.categoryapproveService.createLogSystem({
+        form,
+        newdata,
+        olddata,
+        createby: userData.emailorphone,
+      });
 
-        if (updateCategoryApprove == 0) {
-            return SendError400(res, "CategoryApprove not found id.");
-        }
-        console.log("CategoryApprove delete successfully", capid);
-        return SendCreate(res, 200, "CategoryApprove delete successfully", capid);
-
-
+      if (updateCategoryApprove == 0) {
+        return SendError400(res, "CategoryApprove not found id.");
+      }
+      console.log("CategoryApprove delete successfully", capid);
+      return SendCreate(res, 200, "CategoryApprove delete successfully", capid);
     } catch (error) {
-        console.error("Error delete categoryapprove : ", error);
-        return SendError(res, 500, "Internal Server Error", error.message );
+      console.error("Error delete categoryapprove : ", error);
+      return SendError(res, 500, "Internal Server Error", error.message);
     }
   }
 }

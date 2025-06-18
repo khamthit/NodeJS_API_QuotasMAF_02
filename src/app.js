@@ -13,6 +13,7 @@ const registerlicenseRoutes = require('./routes/registerlicenseRoutes'); // Assu
 const bankRoutes = require('./routes/bankRoute'); // Assuming registerRoutes is for bank
 const userloginRoutes = require('./routes/userloginRoutes'); // Assuming registerRoutes is for bank
 const categoryapproveRoutes = require('./routes/categoryapproveRoutes'); // Assuming registerRoutes is for bank
+const groupapproveRoutes = require('./routes/gropuapproveRoutes'); // Assuming registerRoutes is for bank
 
 
 const errorHandler = require('./middleware/errorHandler');
@@ -84,9 +85,11 @@ app.use('/api/CategoryApprove/newCategoryApprove', categoryapproveRoutes);
 app.use('/api/CategoryApprove/getCategoryApprove', categoryapproveRoutes);
 app.use('/api/CategoryApprove/updateCategoryApprove', categoryapproveRoutes);
 app.use('/api/CategoryApprove/deleteCategoryApprove', categoryapproveRoutes);
-
-
-
+//this is for GroupApprove
+app.use('/api/GroupApprove/newGroupApprove', groupapproveRoutes);
+app.use('/api/GroupApprove/updateGroupApprove', groupapproveRoutes);
+app.use('/api/GroupApprove/getGroupApprove', groupapproveRoutes);
+app.use('/api/GroupApprove/deleteGroupApprove', groupapproveRoutes);
 
 
 const storage = multer.diskStorage({
