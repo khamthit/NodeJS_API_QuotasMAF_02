@@ -112,7 +112,7 @@ class VillageController {
       const userDetails = await VillageController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userDetails.tokenkey != tokenKey) {
+      if (!userDetails) {
         return SendError400(res, 400, "Invalid token key or user not found");
       }
       //this is check data
@@ -161,7 +161,7 @@ class VillageController {
       const userDetails = await VillageController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userDetails.tokenkey != tokenKey) {
+      if (!userDetails) {
         return SendError400(res, 400, "Invalid token key or user not found");
       }
       // this is check data first
@@ -219,7 +219,7 @@ class VillageController {
       const userDetails = await VillageController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userDetails.tokenkey != tokenKey) {
+      if (!userDetails) {
         return SendError400(res, 400, "Invalid token key or user not found");
       }
       //This is save data

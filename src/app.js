@@ -14,7 +14,8 @@ const bankRoutes = require('./routes/bankRoute'); // Assuming registerRoutes is 
 const userloginRoutes = require('./routes/userloginRoutes'); // Assuming registerRoutes is for bank
 const categoryapproveRoutes = require('./routes/categoryapproveRoutes'); // Assuming registerRoutes is for bank
 const groupapproveRoutes = require('./routes/gropuapproveRoutes'); // Assuming registerRoutes is for bank
-
+const employeeRoutes = require('./routes/employeeRoutes'); // Assuming registerRoutes is for employee
+const employeegroupapprovalRoutes = require('./routes/employeegroupapprovalRoutes'); // Assuming registerRoutes is for employee groupapproval
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -90,6 +91,17 @@ app.use('/api/GroupApprove/newGroupApprove', groupapproveRoutes);
 app.use('/api/GroupApprove/updateGroupApprove', groupapproveRoutes);
 app.use('/api/GroupApprove/getGroupApprove', groupapproveRoutes);
 app.use('/api/GroupApprove/deleteGroupApprove', groupapproveRoutes);
+//this is for Employee
+app.use('/api/Employee/newEmployee', employeeRoutes);
+app.use('/api/Employee/getEmployee', employeeRoutes);
+app.use('/api/Employee/updateEmployee', employeeRoutes);
+app.use('/api/Employee/deleteEmployee', employeeRoutes);
+//this is for employee groupapproval
+app.use('/api/EmployeeGroupApproval/newEmployeeGroupApproval', employeegroupapprovalRoutes);
+app.use('/api/EmployeeGroupApproval/getEmployeeGroupApproval', employeegroupapprovalRoutes);
+app.use('/api/EmployeeGroupApproval/updateEmployeeGroupApproval', employeegroupapprovalRoutes);
+app.use('/api/EmployeeGroupApproval/deleteEmployeeGroupApproval', employeegroupapprovalRoutes);
+
 
 
 const storage = multer.diskStorage({

@@ -63,7 +63,7 @@ class CategoryApproveController {
       const userDetail = await CategoryApproveController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userDetail.tokenkey != tokenKey) {
+      if (!userDetail) {
         return SendError400(
           res,
           400,
@@ -168,7 +168,7 @@ class CategoryApproveController {
       const userData = await CategoryApproveController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userData.tokenkey != tokenKey) {
+      if (!userData) {
         return SendError400(res, 400, "Invalid token key or user not found");
       }
       //this is check data first
@@ -217,7 +217,7 @@ class CategoryApproveController {
       const userData = await CategoryApproveController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userData.tokenkey != tokenKey) {
+      if (!userData) {
         return SendError400(res, 400, "Invalid token key or user not found");
       }
       //this is update data

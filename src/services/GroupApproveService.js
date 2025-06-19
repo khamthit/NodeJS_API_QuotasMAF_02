@@ -44,11 +44,11 @@ class GroupApproveService {
 
   async newgroupapprove(getData) {
     try {
-      const { capid, groupcode, groupname, createby } = getData;
+      const { capid, groupcode, groupname, createby, levelapprove } = getData;
       const result = await sequelize.query(
-        `CALL pd_newgroupapproval(:capid, :groupcode, :groupname, :createby)`,
+        `CALL pd_newgroupapproval(:capid, :groupcode, :groupname, :createby, :levelapprove)`,
         {
-          replacements: { capid, groupcode, groupname, createby },
+          replacements: { capid, groupcode, groupname, createby, levelapprove },
           type: sequelize.QueryTypes.RAW,
         }
       );
@@ -58,13 +58,14 @@ class GroupApproveService {
       throw new Error(`Failed to fetch BankService: ${error.message}`);
     }
   }
-  async updategroupapprove(capid, groupcode, groupname, gpaid) {
+  async updategroupapprove(capid, groupcode, groupname, gpaid, levelapprove) {
     try {
       const update = await GroupApprove.update(
         {
           groupname: groupname,
           groupcode: groupcode,
           capid: capid,
+          levelapprove: levelapprove,
         },
         {
           where: {

@@ -62,8 +62,7 @@ class UserController {
       if (!userDetails) {
         return SendError400(res, "Invalid token key or user not found");
       }
-      if (userDetails.tokenkey !== tokenKey
-      ) {
+      if (userDetails.tokenkey !== tokenKey) {
         return SendError(
           res,
           400,
@@ -88,7 +87,7 @@ class UserController {
           res, // SendError400 implies 400 status
           "Missing required fields: emailorphone or passwords"
         );
-      }      
+      }
       const userData = await this.userService.loginUser2(
         emailorphone,
         passwords
@@ -98,8 +97,7 @@ class UserController {
         return SendError(res, 401, userData.message); // 401 for unauthorized
       }
       console.log("Login successful :", userData);
-      return SendSuccess(res, "Login successful.", userData)
-
+      return SendSuccess(res, "Login successful.", userData);
     } catch (error) {
       console.error("Error in loginUser controller:", error.message);
       next(error); // Pass to global error handler
@@ -118,10 +116,7 @@ class UserController {
         );
       }
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
-      if (
-        !userDetails ||
-        userDetails.tokenkey !== tokenKey
-      ) {
+      if (!userDetails) {
         return SendError400(
           res,
           "Authorization failed: Invalid token key or type login mismatch."
@@ -190,10 +185,7 @@ class UserController {
       }
       // Authorize the action
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
-      if (
-        !userDetails ||
-        userDetails.tokenkey !== tokenKey
-      ) {
+      if (!userDetails || userDetails.tokenkey !== tokenKey) {
         return SendError400(
           res,
           "Authorization failed: Invalid token key or type login mismatch."
@@ -290,21 +282,23 @@ class UserController {
       }
       // Authorize the action
       const userDetails = await UserController.fetchTokenKeyForUser(tokenKey);
-      if (
-        !userDetails ||
-        userDetails.tokenkey !== tokenKey
-      ) {
+      if (!userDetails) {
         return SendError400(
           res,
           "Authorization failed: Invalid token key or type login mismatch."
         );
       }
       // Call the service to delete the user login
-      const deletedUser = await this.userService.deleteUserLoginSerivce(emailorphone, userDetails.emailorphone);
+      const deletedUser = await this.userService.deleteUserLoginSerivce(
+        emailorphone,
+        userDetails.emailorphone
+      );
       if (!deletedUser) {
         return SendError(res, 404, "User not found or deletion failed.");
-      }      
-      return SendSuccess(res, "User login deleted successfully.", {deletedUser});
+      }
+      return SendSuccess(res, "User login deleted successfully.", {
+        deletedUser,
+      });
     } catch (error) {
       console.error(
         `Error in deleteUserLogin controller for ${emailorphone}:`,
@@ -338,13 +332,14 @@ class UserController {
       }
       // Call the service to update the user login status
       const updatedUser = await this.userService.updateUserLoginActiveService(
-        emailorphone, userDetails.emailorphone
+        emailorphone,
+        userDetails.emailorphone
       );
 
       if (!updatedUser) {
         return SendError(res, 404, "User not found or update failed.");
       }
-      
+
       return SendSuccess(res, "User login status updated successfully.", {
         user: updatedUser,
       });
@@ -356,8 +351,6 @@ class UserController {
       next(error);
     }
   }
-
-
 }
 
 module.exports = UserController;

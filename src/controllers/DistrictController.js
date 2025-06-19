@@ -95,7 +95,7 @@ class DistrictController {
             return SendError400(res, "Missing required fields");
         };
         const userDetails = await DistrictController.fetchTokenKeyForUser(tokenKey);
-        if (userDetails.tokenkey !== tokenKey) {
+        if (!userDetails) {
             return SendError(res, 400, "Authorization failed: Invalid token key or type login mismatch.");
         }
         
@@ -140,7 +140,7 @@ class DistrictController {
         }
         //this is fect tokenkey
         const userDetail = await DistrictController.fetchTokenKeyForUser(tokenKey);
-        if (userDetail.tokenkey != tokenKey){
+        if (!userDetail){
             return SendError400(res, 400, "Authorization failed: Invalid token key");
         }
         const updateDistrict = await this.districtService.updateDistrict({
@@ -183,7 +183,7 @@ class DistrictController {
         }
         //this is fect tokenkey
         const userDetail = await DistrictController.fetchTokenKeyForUser(tokenKey);
-        if (userDetail.tokenkey != tokenKey){
+        if (!userDetail){
             return SendError400(res, 400, "Authorization failed: Invalid token key");
         }
         const deleteDistrict = await this.districtService.deleteDistrict({

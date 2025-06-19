@@ -12,7 +12,7 @@ const groupapproveController = new GroupApproveController(groupapproveService);
 //  router.get("/", categoryapproveController.getAllCategoryApprove.bind(categoryapproveController));
 router.post("/", groupapproveController.newgroupapprove.bind(groupapproveController));
 router.put("/", groupapproveController.updategroupapprove.bind(groupapproveController));
-router.get("/", groupapproveController.getAllCategoryApprove.bind(groupapproveController));
+router.get("/", groupapproveController.getAllGroupApprove.bind(groupapproveController));
 router.delete("/", groupapproveController.deletegroupapprove.bind(groupapproveController));
 
 module.exports = router;

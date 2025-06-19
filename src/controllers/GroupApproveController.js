@@ -54,7 +54,7 @@ class GroupApproveController {
     console.log("save new groupapprove");
     try {
       const { tokenKey } = req.query;
-      const { capid, groupcode, groupname } = req.body;
+      const { capid, groupcode, groupname, levelapprove } = req.body;
 
       if (!capid || !groupcode || !groupname) {
         return SendError400(res, "Missing required fields");
@@ -63,7 +63,7 @@ class GroupApproveController {
       const userDetail = await GroupApproveController.fetchTokenKeyForUser(
         tokenKey
       );
-      if (userDetail.tokenkey != tokenKey) {
+      if (!userDetail) {
         return SendError400(
           res,
           400,
@@ -86,6 +86,7 @@ class GroupApproveController {
         groupcode,
         groupname,
         createby: userDetail.emailorphone,
+        levelapprove
       });
 
       let newdatas =
@@ -117,11 +118,11 @@ class GroupApproveController {
     console.log("updategroupapprove");
     try {
         const {tokenKey} = req.query;
-        const {capid, groupcode, groupname, gpaid} = req.body;
+        const {capid, groupcode, groupname, gpaid, levelapprove} = req.body;
 
         //this is fectdata token
         const userData = await GroupApproveController.fetchTokenKeyForUser(tokenKey);
-        if (userData.tokenkey != tokenKey) {
+        if (!userData) {
             return SendError400(res, 400, "Invalid token key or user not found");
         }
         //this is check data first
@@ -130,8 +131,8 @@ class GroupApproveController {
             return SendDuplicateData(res, 404, "Duplicate data.");
         }
         //this is update data
-        const update = await this.groupapproveService.updategroupapprove(capid, groupcode, groupname, gpaid);
-        let newdatas = "update groupname: " + groupname + ", groupcode: " + groupcode + ", capid: " + capid + ", gpaid: " + gpaid;
+        const update = await this.groupapproveService.updategroupapprove(capid, groupcode, groupname, gpaid, levelapprove);
+        let newdatas = "update groupname: " + groupname + ", groupcode: " + groupcode + ", capid: " + capid + ", gpaid: " + gpaid; +", levelapprove :"+ levelapprove;
         const savelog = await this.groupapproveService.savelogsystem({
             form: "Update GroupApprove",
             newdata: newdatas,
@@ -144,7 +145,7 @@ class GroupApproveController {
       return SendError(res, 500, "Internal Server Error", next);
     }
   }
-  async getAllCategoryApprove(req, res, next) {
+  async getAllGroupApprove(req, res, next) {
     try {
       console.log("show CategoryApprove");
       const { page, limit, tokenKey, searchtext, onlycapid } = req.query;
@@ -204,7 +205,7 @@ class GroupApproveController {
 
         //this is fectdata token
         const userData = await GroupApproveController.fetchTokenKeyForUser(tokenKey);
-        if (userData.tokenkey != tokenKey) {
+        if (!userData) {
             return SendError400(res, 400, "Invalid token key or user not found");
         }
         //this is update data

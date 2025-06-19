@@ -2,36 +2,34 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const moment = require("moment"); // Import moment.js for date formatting
 
-const CategoryApprove = require('./CategoryApprove'); // Import CategoryApprove model for join table
-const GroupApprove = sequelize.define(
-  "GroupApprove",
+const Gender = require("../models/Gender");
+const Employee = require("../models/Employee");
+const GroupApprove = require("../models/GroupApprove");
+
+
+const EmployeeGroupApproval = sequelize.define(
+  "EmployeeGroupApproval",
   {
-    gpaid: {
+    egpid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
-      field: "gpaid",
+      field: "egpid",
     },
-    capid: {
+    eid: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "capid",
+      field: "eid",
     },
-    groupcode: {
+    gpaid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: "gpaid",
+    },
+    moreinfo: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "groupcode",
-    },
-    groupname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "groupname",
-    },
-    statustype: {
-      type: DataTypes.STRING(10),
-      allowNull: true,
-      defaultValue: "ADD",
-      field: "statustype",
+      field: "moreinfo",
     },
     createby: {
       type: DataTypes.STRING,
@@ -47,19 +45,26 @@ const GroupApprove = sequelize.define(
         return rawValue ? moment(rawValue).format("YYYY-MM-DD HH:mm:ss") : null;
       },
     },
-    levelapprove: {
-      type: DataTypes.INTEGER,
+    statustype: {
+      type: DataTypes.STRING(10),
       allowNull: true,
-      field: "levelapprove",
+      field: "statustype",
     },
   },
   {
     timestamps: false,
-    tableName: "tb_groupapproval",
+    tableName: "tb_empgroupapproval",
   }
 );
 
-// Define association: GroupApprove belongs to CategoryApprove
-GroupApprove.belongsTo(CategoryApprove, { foreignKey: 'capid', targetKey: 'capid' });
+EmployeeGroupApproval.belongsTo(Employee, {
+  foreignKey: "eid",
+  as: "employee",
+});
 
-module.exports = GroupApprove;
+EmployeeGroupApproval.belongsTo(GroupApprove, {
+  foreignKey: "gpaid",
+  as: "groupapprove",
+});
+
+module.exports = EmployeeGroupApproval;
