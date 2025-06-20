@@ -16,6 +16,9 @@ const categoryapproveRoutes = require('./routes/categoryapproveRoutes'); // Assu
 const groupapproveRoutes = require('./routes/gropuapproveRoutes'); // Assuming registerRoutes is for bank
 const employeeRoutes = require('./routes/employeeRoutes'); // Assuming registerRoutes is for employee
 const employeegroupapprovalRoutes = require('./routes/employeegroupapprovalRoutes'); // Assuming registerRoutes is for employee groupapproval
+const approvehistoryregisterRoutes = require('./routes/approvehistoryregisterRoutes');
+const historyregisterRoutes = require('./routes/historyregisterRoutes');
+
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -101,6 +104,13 @@ app.use('/api/EmployeeGroupApproval/newEmployeeGroupApproval', employeegroupappr
 app.use('/api/EmployeeGroupApproval/getEmployeeGroupApproval', employeegroupapprovalRoutes);
 app.use('/api/EmployeeGroupApproval/updateEmployeeGroupApproval', employeegroupapprovalRoutes);
 app.use('/api/EmployeeGroupApproval/deleteEmployeeGroupApproval', employeegroupapprovalRoutes);
+//this is for approvehistory approval
+app.use('/api/ApproveHistoryRegister/newApproveHistoryRegister', approvehistoryregisterRoutes);
+app.use('/api/ApproveHistoryRegister/getRegisterbyAdmin', approvehistoryregisterRoutes);
+//this is for history register
+app.use('/api/HistoryRegister/getHistoryRegister', historyregisterRoutes);
+
+
 
 
 

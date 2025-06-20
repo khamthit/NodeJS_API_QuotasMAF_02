@@ -68,9 +68,9 @@ class EmployeeGroupApprovalController {
 
       //this is check data first
       const checkDataFirst =
-        await this.employeeGroupApprovalService.checkDataFirst(eid, gpaid);
+        await this.employeeGroupApprovalService.checkDataFirst(eid);
       if (checkDataFirst) {
-        return SendDuplicateData(res, 409, "Duplicate data.");
+        return SendDuplicateData(res, 409, "Duplicate data, an user can using only one group.");
       }
       //this is save data
       const newdata =
@@ -180,13 +180,13 @@ class EmployeeGroupApprovalController {
       }
 
       //this is check data
-      const checkData = await this.employeeGroupApprovalService.checkDataFirst(
-        eid,
-        gpaid
-      );
-      if (!checkData) {
-        return SendDuplicateData(res, 409, "Data is duplications.");
-      }
+      // const checkData = await this.employeeGroupApprovalService.checkDataFirst(
+      //   eid,
+      //   gpaid
+      // );
+      // if (!checkData) {
+      //   return SendDuplicateData(res, 409, "Data is duplications.");
+      // }
 
       //this is update data
       const update =

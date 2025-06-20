@@ -11,12 +11,11 @@ const Employee = require("../models/Employee");
 
 
 class EmployeeGroupApprovalService {
-  async checkDataFirst(eid, gpaid) {
+  async checkDataFirst(eid) {
     try {
       const groupapprove = await EmployeeGroupApproval.findOne({
         where: {
           eid: eid,
-          gpaid: gpaid,
           statustype: "ADD",
         },
       });

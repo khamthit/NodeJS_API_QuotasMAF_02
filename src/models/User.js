@@ -1,6 +1,7 @@
 // src/models/User.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Adjust path if your db.js is elsewhere
+const Employee = require('./Employee');
 
 const User = sequelize.define('User', {
     // Model attributes are defined here
@@ -45,9 +46,14 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    eid:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
 }, {
     timestamps: false, 
     tableName: 'tb_userlogin'
 });
 
+User.belongsTo(Employee, { foreignKey: 'eid', targetKey: 'eid' });
 module.exports = User;

@@ -131,6 +131,14 @@ const Register = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: true,
     },
+    levelapproval:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    userapproval:{
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
 
   },
   {

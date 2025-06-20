@@ -107,7 +107,7 @@ class UserController {
   async createUser(req, res, next) {
     try {
       const { tokenKey } = req.query; // For authorization/context
-      const { userorphone, passwords, getTypeLogin } = req.body; // User data to create
+      const { userorphone, passwords, getTypeLogin, eid } = req.body; // User data to create
 
       if (!userorphone || !passwords || !getTypeLogin) {
         return SendError400(
@@ -134,11 +134,12 @@ class UserController {
         return SendError400(res, "User already exists.");
       }
       // Use named placeholders for security
-      const procedureQuery = `CALL pd_newsuerlogin(
+      const procedureQuery = `CALL pd_newsuerloginUpdate(
             :get_emailorphone, 
             :get_passwords, 
             :get_typelogin, 
-            :get_createby
+            :get_createby,
+            :get_eid
         )`;
 
       //this is encrypt passwords before sending to the stored procedure
@@ -150,6 +151,7 @@ class UserController {
           get_passwords: getpasswords, // IMPORTANT: Ensure passwords are hashed before sending to DB or within SP
           get_typelogin: getTypeLogin,
           get_createby: userDetails.emailorphone, // Assuming tokenKey is used as createBy
+          get_eid: eid,
         },
         type: Sequelize.QueryTypes.RAW, // Use Sequelize.QueryTypes
       });
