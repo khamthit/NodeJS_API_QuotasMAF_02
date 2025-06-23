@@ -18,7 +18,9 @@ const employeeRoutes = require('./routes/employeeRoutes'); // Assuming registerR
 const employeegroupapprovalRoutes = require('./routes/employeegroupapprovalRoutes'); // Assuming registerRoutes is for employee groupapproval
 const approvehistoryregisterRoutes = require('./routes/approvehistoryregisterRoutes');
 const historyregisterRoutes = require('./routes/historyregisterRoutes');
-
+const hscodeRoutes = require('./routes/hscodeRoutes');
+const hscodecustomerRoutes = require('./routes/hscodecustomerRoutes');
+const requestquotasRoutes = require('./routes/requestquotasRoutes');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -110,9 +112,14 @@ app.use('/api/ApproveHistoryRegister/getRegisterbyAdmin', approvehistoryregister
 //this is for history register
 app.use('/api/HistoryRegister/getHistoryRegister', historyregisterRoutes);
 
+//this is showing hscode
+app.use('/api/HScode/getHScodeAdmin', hscodeRoutes);
+app.use('/api/HScode/getHScodeCustomer', hscodecustomerRoutes);
+app.use('/api/HScode/updateHScodeActive', hscodeRoutes);
 
-
-
+//this is for user or customer requestQuotasDetails
+app.use('/api/RequestQuota/getRequestQuotas', requestquotasRoutes);
+app.use('/api/RequestQuota/newRequestQuotas', requestquotasRoutes);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

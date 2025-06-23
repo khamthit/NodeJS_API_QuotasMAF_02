@@ -2,14 +2,14 @@ const User = require("../models/User"); // Assuming User model
 const LogSystem = require("../models/logsystem"); // Assuming LogSystem model
 const { Op } = require("sequelize"); // Import Op for Sequelize operators
 const sequelize = require("../config/db");
-const Employee = require("../models/Employee"); // Assuming User model
-const Register = require("../models/Register"); // Assuming User model
-const Gender = require("../models/Gender"); // Assuming User model
-const HistoryRegister = require("../models/HistoryRegister"); // Assuming User model
+const HSCodel2 = require("../models/HSCodel2"); // Assuming User model
+const HSCodel1 = require("../models/HSCodel1"); // Assuming User model
+const HSCode = require("../models/HScode");
 
-class HistoryRegisterService {
-  async getAllHistoryRegister({ page, limit, searchtext, rgstid }) {
-    console.log("Showing all History Register");
+
+class HScodeService{
+async getAllHScode({ page, limit, searchtext }) {
+    console.log("Showing all HScode");
     try {
       const currentPage = page ? parseInt(page, 10) : 1;
       const pageLimit = limit ? parseInt(limit, 10) : 10;
@@ -17,10 +17,10 @@ class HistoryRegisterService {
 
       let whereClause = {
         statustype: "ADD",
-        rgstid: rgstid, // Add the approveby filter here
+        actives: "Y"// Add the approveby filter here
       };
       //this is search like
-      if (searchtext && searchtext.trim() !== "" && rgstid != "") {
+      if (searchtext && searchtext.trim() !== "") {
         const searchPattern = `%${searchtext}%`;
         // If searchtext is provided, combine it with the rectype filter using Op.and
         whereClause = {
@@ -29,48 +29,43 @@ class HistoryRegisterService {
             {
               // Add the search conditions
               [Op.or]: [
-                { approvecomment: { [Op.iLike]: `%${searchPattern}%` } },
+                { codeen: { [Op.iLike]: `%${searchPattern}%` } },
+                { codela: { [Op.iLike]: `%${searchPattern}%` } },
+                { l2code: { [Op.iLike]: `%${searchPattern}%` } },
               ],
             },
           ],
         };
       }
       //this is search only category approve's ID, when onlycapid != empty then system will showing data by capid's id.
-      if (searchtext.trim() == "" && rgstid != "") {
+      if (searchtext.trim() == "") {
         whereClause = {
           [Op.and]: [
             { statustype: "ADD" }, // Keep the rectype filter
-            {
-              // Add the search conditions
-              [Op.or]: [{ rgstid: parseInt(rgstid, 10) }],
-            },
+            { actives: "Y" },
           ],
         };
       }
-      const { count, rows } = await HistoryRegister.findAndCountAll({
+      const { count, rows } = await HSCode.findAndCountAll({
         where: whereClause,
         include: [
           {
-            model: User,
-            as: "User", // Corrected alias to match the model name
+            model: HSCodel2,
+            as: "HSCodel2", // Corrected alias to match the model name
             include: [
               {
-                model: Employee,
+                model: HSCodel1,
+                as: "HSCodel1", // Corrected alias to match the model name"
                 required: false, // Use false if you want HistoryRegister even if no associated Employee
               },
             ],
             required: false, // Use false if you want HistoryRegister even if no associated User
             duplicating: false,
-          },
-          {
-            model: Register,
-            as: "Register", // Assuming the default alias is Register
-            required: false,
-          },
+          },          
         ],
         limit: pageLimit,
         offset: offset,
-        order: [["ahid", "desc"]], // Sorting as an example
+        order: [["hsl3id", "asc"]], // Sorting as an example
       });
       return {
         items: rows,
@@ -81,10 +76,31 @@ class HistoryRegisterService {
     } catch (error) {
       console.log("Error message Service :", error);
       throw new Error(
-        `Failed to fetch History Register Service: ${error.message}`
+        `Failed to fetch HSCode Service: ${error.message}`
       );
     }
   }
-  
+  async updatehscodeactive(dataAdd){
+    try {
+        const {hsl3id, actives} = dataAdd;
+        const udpate = await HSCode.update(
+            {
+                actives: actives,
+            },
+            {
+                where: {
+                    hsl3id: hsl3id,
+                },
+            }
+        );
+        return udpate;
+
+    } catch (error) {
+        console.log("Error message Service :", error);
+        throw new Error(
+          `Failed to update HSCode Service: ${error.message}`
+        );
+    }
+  }
 }
-module.exports = HistoryRegisterService;
+module.exports = HScodeService;
