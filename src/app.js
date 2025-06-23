@@ -120,6 +120,11 @@ app.use('/api/HScode/updateHScodeActive', hscodeRoutes);
 //this is for user or customer requestQuotasDetails
 app.use('/api/RequestQuota/getRequestQuotas', requestquotasRoutes);
 app.use('/api/RequestQuota/newRequestQuotas', requestquotasRoutes);
+app.use('/api/RequestQuota/deleteRequestQuotas', requestquotasRoutes);
+
+
+
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

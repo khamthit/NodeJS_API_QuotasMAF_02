@@ -10,5 +10,6 @@ const requestquotasController = new RequestQuotasController(requestquotasService
 
 router.get("/", requestquotasController.getAllRequestQuotas.bind(requestquotasController));
 router.post("/", requestquotasController.newrequestquotas.bind(requestquotasController));
+router.delete("/", requestquotasController.deleterequestquotas.bind(requestquotasController));
 
 module.exports = router;

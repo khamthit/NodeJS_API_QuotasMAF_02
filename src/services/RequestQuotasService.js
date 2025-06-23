@@ -132,5 +132,27 @@ class RequestQuotasService {
       throw new Error("Failed to add item request quotas Service");
     }
   }
+
+  async deleterequestquotas(data) {
+    try {
+        const {qtrid} = data;
+        //delete data without procedure
+        const deletedata = await RequestQuotas.update(
+            {
+                statustype: "DEL",
+            },
+            {
+                where: {
+                    qtrid: qtrid,
+                },
+            }
+        );
+        return deletedata;  
+        
+    } catch (error) {
+        console.error("Error delete requestQuotas", error);
+        throw new Error("Failed to delete requestQuotas");
+    }
+  }
 }
 module.exports = RequestQuotasService;

@@ -157,5 +157,39 @@ class RequestQuotasController {
       SendError(res, 500, "Internal Server Error", error);
     }
   }
+
+  async deleterequestquotas (req, res, next){
+    try {
+        const {tokenKey} = req.query;
+        const {qtrid} = req.body;
+        //check userdata}
+        const userData = await RequestQuotasController.fetchTokenKeyForCustomer(tokenKey);
+        if (!userData){
+            return SendError400(res, "Invalid token key or user not found");
+        }
+        let createby = userData.businessid;
+        const deletedata = await this.requestquotasService.deleterequestquotas({
+            qtrid,
+        });
+
+        let newdatas =
+        "Delete by: " +
+        createby +
+        ", qtrid " +
+        qtrid;
+      //this is save log
+      const savelog = await this.requestquotasService.savelogsystem({
+        form: "Delete item request Quotas.",
+        newdata: newdatas,
+        olddata: "",
+        createby: createby,
+      });
+    
+      return SendCreate(res, 200, "Deleted", newdatas);        
+    } catch (error) {
+         console.error("Error delete requestquotas in Controller:", error);
+      SendError(res, 500, "Internal Server Error", error);
+    }
+  }
 }
 module.exports = RequestQuotasController;
