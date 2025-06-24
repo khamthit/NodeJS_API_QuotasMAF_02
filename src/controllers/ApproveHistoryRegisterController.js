@@ -18,7 +18,7 @@ const ApproveHistoryRegister = require("../models/ApproveHistoryRegister"); // A
 const CategoryApprove = require("../models/CategoryApprove"); // Assuming User
 const EmployeeGroupApprove = require("../models/EmployeeGroupApproval");
 const registerService = require("../services/RegisterService");
-const vm_empgroupapprovalActive = require("../models/vm_empgroupapprovalActive");
+const vm_empgroupapprovalActive = require("../models/vm_empgroupapprovalactive");
 const approveHistory = require("../services/ApproveHistoryRegisterService");
 
 

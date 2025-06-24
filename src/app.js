@@ -21,6 +21,10 @@ const historyregisterRoutes = require('./routes/historyregisterRoutes');
 const hscodeRoutes = require('./routes/hscodeRoutes');
 const hscodecustomerRoutes = require('./routes/hscodecustomerRoutes');
 const requestquotasRoutes = require('./routes/requestquotasRoutes');
+const countryRoutes = require('./routes/countryRoutes');
+const requestquotasadminRoutes =  require('./routes/requestquotasadminRoutes');
+const approvehistoryquotasadminRoutes = require('./routes/approvehistoryquotasadminRoutes');
+
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -121,6 +125,13 @@ app.use('/api/HScode/updateHScodeActive', hscodeRoutes);
 app.use('/api/RequestQuota/getRequestQuotas', requestquotasRoutes);
 app.use('/api/RequestQuota/newRequestQuotas', requestquotasRoutes);
 app.use('/api/RequestQuota/deleteRequestQuotas', requestquotasRoutes);
+//this is for admin requestquotasadminDetails
+app.use('/api/RequestQuotaAdmin/getRequestQuotasAdmin', requestquotasadminRoutes);
+app.use('/api/RequestQuotaAdmin/newApproveQuotasAdmin', requestquotasadminRoutes);
+//this is for display country
+app.use('/api/Country/getCountry', countryRoutes);
+//this is for admin showing approve history
+app.use('/api/ApproveHistoryQuotasAdmin/getapprovehistoryquotasadmin', approvehistoryquotasadminRoutes);
 
 
 

@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db"); // Adjust path if your db.js is elsewhere
 
 const vm_empgroupapprovalActive = sequelize.define(
-  'vm_empgroupapprovalActive',
+  'vm_empgroupapprovalactive',
   {
     egpid: {
       type: DataTypes.INTEGER,

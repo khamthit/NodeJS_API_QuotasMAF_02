@@ -7,7 +7,7 @@ const Quotas = require("../models/Quotas");
 
 
 const RequestQuotas = sequelize.define(
-  "RequestQuotas",
+  "requestquotas",
   {
     qtrid: {
       type: DataTypes.INTEGER,
@@ -22,7 +22,7 @@ const RequestQuotas = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    requestquot: {
+    requestquota: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },

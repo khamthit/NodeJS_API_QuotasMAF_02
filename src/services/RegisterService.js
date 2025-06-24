@@ -8,7 +8,7 @@ const {
   SendError400,
   SendDuplicateData,
 } = require("../utils/response");
-const Register = require("../models/Register");
+// const Register = require("../models/Register");
 const redisClient = require("../config/redisClient");
 const nodemailer = require("nodemailer");
 

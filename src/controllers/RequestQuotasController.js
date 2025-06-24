@@ -11,7 +11,7 @@ const moment = require("moment"); // Import moment.js
 
 const HSCodel3 = require("../models/HScode"); // Assuming District model
 const User = require("../models/User");
-const Register = require("../models/register");
+const Register = require("../models/Register");
 const LogSystem = require("../models/logsystem"); // Assuming LogSystem model
 const { Op } = require("sequelize"); // Import Op for Sequelize operators
 

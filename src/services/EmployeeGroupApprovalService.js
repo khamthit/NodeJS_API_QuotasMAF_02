@@ -8,6 +8,8 @@ const Gender = require("../models/Gender");
 const GroupApprove = require("../models/GroupApprove");
 const CategoryApprove = require("../models/CategoryApprove");
 const Employee = require("../models/Employee");
+const vm_empgroupapprovalactive = require("../models/vm_empgroupapprovalactive");
+
 
 
 class EmployeeGroupApprovalService {
@@ -193,6 +195,24 @@ class EmployeeGroupApprovalService {
     }
   }
 
-
+  async getemployeegroupapprovalbylevelcategory(getdata) {
+    try {
+      const { eid, capid } = getdata;
+      let whereClause = {
+        capid: capid, 
+        eid: eid,
+      };
+      //this is showing data
+      const data = await vm_empgroupapprovalactive.findOne({
+        where: whereClause,
+      });
+      console.log("Service admin :", data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching employee group approval by level category:", error);
+      // Propagate a more informative error to help with debugging.
+      throw new Error(`Failed to fetch employee group approval by level category: ${error.message}`);
+    }
+  }
 }
 module.exports = EmployeeGroupApprovalService;
