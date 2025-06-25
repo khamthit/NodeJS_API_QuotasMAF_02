@@ -7,6 +7,9 @@ const HSCodel3 = require("../models/HScode"); // Assuming User model
 const RequestQuotas = require("../models/RequestQuotas"); // Assuming User model
 const HSCodel2 = require("../models/HSCodel2"); // Assuming User model
 const vm_empgroupapprovalactive = require("../models/vm_empgroupapprovalactive");
+const Country = require("../models/Country"); // Assuming User model
+const CountryCheckpoint = require("../models/CountryCheckpoint"); // Assuming User model
+
 
 class RequestQuotasService {
   async savelogsystem(logData) {
@@ -81,6 +84,8 @@ class RequestQuotasService {
             model: Quotas,
             as: "Quotas", // Corrected alias to match the model name
           },
+           {model: Country, as: "country"},
+          {model: CountryCheckpoint, as: "checkpoint"},
         ],
         limit: pageLimit,
         offset: offset,
@@ -149,6 +154,8 @@ class RequestQuotasService {
             model: Quotas,
             as: "Quotas", // Corrected alias to match the model name
           },
+          {model: Country, as: "country"},
+          {model: CountryCheckpoint, as: "checkpoint"},
         ],
         limit: pageLimit,
         offset: offset,
