@@ -178,16 +178,6 @@ class EmployeeGroupApprovalController {
       if (!UserData) {
         return SendError400(res, "Invalid token key or user not found");
       }
-
-      //this is check data
-      // const checkData = await this.employeeGroupApprovalService.checkDataFirst(
-      //   eid,
-      //   gpaid
-      // );
-      // if (!checkData) {
-      //   return SendDuplicateData(res, 409, "Data is duplications.");
-      // }
-
       //this is update data
       const update =
         await this.employeeGroupApprovalService.updateemployeegroupapprove({

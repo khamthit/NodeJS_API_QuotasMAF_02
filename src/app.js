@@ -24,6 +24,10 @@ const requestquotasRoutes = require('./routes/requestquotasRoutes');
 const countryRoutes = require('./routes/countryRoutes');
 const requestquotasadminRoutes =  require('./routes/requestquotasadminRoutes');
 const approvehistoryquotasadminRoutes = require('./routes/approvehistoryquotasadminRoutes');
+const countrycheckpointRoutes = require('./routes/countrycheckpointRoutes');
+const countrycheckpointuserRoutes = require('./routes/countrycheckpointuserRoutes');
+
+
 
 
 const errorHandler = require('./middleware/errorHandler');
@@ -130,6 +134,12 @@ app.use('/api/RequestQuotaAdmin/getRequestQuotasAdmin', requestquotasadminRoutes
 app.use('/api/RequestQuotaAdmin/newApproveQuotasAdmin', requestquotasadminRoutes);
 //this is for display country
 app.use('/api/Country/getCountry', countryRoutes);
+app.use('/api/CountryCheckpoint/getCountryCheckpointAdmin', countrycheckpointRoutes);
+app.use('/api/CountryCheckpoint/getCountryCheckpointUser', countrycheckpointuserRoutes);
+app.use('/api/CountryCheckpoint/newCountryCheckpoint', countrycheckpointRoutes);
+app.use('/api/CountryCheckpoint/updateCountryCheckpoint', countrycheckpointRoutes);
+app.use('/api/CountryCheckpoint/deleteCountryCheckpoint', countrycheckpointRoutes);
+
 //this is for admin showing approve history
 app.use('/api/ApproveHistoryQuotasAdmin/getapprovehistoryquotasadmin', approvehistoryquotasadminRoutes);
 
